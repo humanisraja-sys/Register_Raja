@@ -1,72 +1,390 @@
 <!DOCTYPE html>
-<html>
-    <head>
-        <meta http-equiv="content-type" content="text/html; charset=utf-8" />
-        <title>`substitute(Filename('', 'Page Title'), '^.', '\u&', '')`</title>
-        
-    </head>
-    <body>
-        <h2>Raja Keren Register</h2>
-        <form id="registerForm">
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Form Registrasi Privasi</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 
-            <input required type="text" name="" id="nama" value="" placeholder="Nama lengkap"/><br>
-            <input required type="email" name="" id="email" value="" placeholder="Email"/><br>
-            <input required type="password" name="" id="password" value="" placeholder="Password"/><br>
-            <input required type="number" name="" id="nomor hp" value="" placeholder="Nomor Hp"/><br>
-            <input required type="date" name="" id="date" value="" placeholder="Tanggal Lahir"/><br>
-            <button type="submit" style="color: red;">Submit</button>
-        </form>
-        <table id="datatable" style="border: 1px solid black;">
-            <thead>
-                <tr>
-                    <th>Nama</th>
-                    <th>Email</th>
-                    <th>Tanggal Lahir</th>
-                </tr>
-            </thead>
-        </table>
-        
-    </body>
-</html>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
 
-<script type="text/javascript">
-    document.getElementById('registerForm').addEventListener('submit', function(e) {
-        e.preventDefault();// mencegah refresh halaman
+    html {
+      scroll-behavior: smooth;
+    }
 
-        // Ambil data dari form
-        const nama = document.getElementById('nama').value;
-        const email = document.getElementById('email').value;
-        const nomorHp = document.getElementById('nomor hp').value;
-        const tanggalLahir = document.getElementById('date').value;
+    body {
+      font-family: 'Bebas Neue', Arial, sans-serif;
+      background-color: #fff;
+      color: #333;
+      position: relative;
+      overflow-x: hidden;
+      min-height: 100vh;
+    }
 
-        // Buat objek data
-        const data = {
-            nama: nama,
-            email: email,
-            nomorHp: nomorHp,
-            tanggalLahir: tanggalLahir
-        };
+    body::before {
+      content: "";
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 100vh;
+      background: radial-gradient(ellipse at center, transparent 40%, rgba(0, 0, 0, 0.2) 100%);
+      z-index: 0;
+      pointer-events: none;
+    }
 
-        // Tambahkan ke tabel HTML
-        const table = document.getElementById('datatable');
-        const row = table.insertRow(-1);
-        row.insertCell(0).textContent = nama;
-        row.insertCell(1).textContent = email;
-        row.insertCell(2).textContent = tanggalLahir;
-        row.insertCell(3).textContent = '-';
+    .navbar, .container, .form-container, table, footer, .chat-box {
+      position: relative;
+      z-index: 1;
+    }
 
-        // Simpan data ke file JSON
-        const fileData = JSON.stringify(data, null, 2);
-        const blob = new Blob([fileData], { type: "application/json" });
-        const url = URL.createObjectURL(blob);
+    .navbar {
+      background-color: rgba(17, 17, 17, 0.9);
+      padding: 1rem 2rem;
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.3);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
 
-        // Buat dan klik link download
-        const a = document.createElement("a");
-        a.href = url;
-        a.download = `data-${nama}.json`;
-        a.click();
+    .navbar ul {
+      list-style: none;
+      display: flex;
+      gap: 2rem;
+    }
 
-        // Bersihkan form
-        document.getElementById('registerForm').reset();
+    .navbar li {
+      display: inline-block;
+    }
+
+    .navbar a {
+      text-decoration: none;
+      color: #fff;
+      font-size: 1.2rem;
+      position: relative;
+      padding: 0.3rem 0.6rem;
+      transition: transform 0.3s ease, background-color 0.3s;
+      cursor: pointer;
+    }
+
+    .navbar a:hover {
+      background-color: #e50914;
+      border-radius: 5px;
+    }
+
+    .navbar a.active,
+    .navbar a:focus {
+      background-color: #f40612;
+      border-radius: 5px;
+      transform: scale(1.1);
+    }
+
+    .navbar .mu-logo {
+      width: 50px;
+      height: auto;
+      cursor: pointer;
+      transition: transform 0.3s ease;
+    }
+
+    .navbar .mu-logo:hover {
+      transform: scale(1.1);
+    }
+
+    .container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 4rem 1rem;
+    }
+
+    .form-container {
+      background-color: rgba(0, 0, 0, 0.8);
+      padding: 2rem;
+      border-radius: 10px;
+      width: 90%;
+      max-width: 400px;
+      box-shadow: 0 0 15px rgba(0, 0, 0, 0.3);
+      color: white;
+    }
+
+    h2 {
+      font-size: 2.2rem;
+      margin-bottom: 1rem;
+      text-align: center;
+      letter-spacing: 1px;
+    }
+
+    form input {
+      width: 100%;
+      padding: 0.8rem;
+      margin-bottom: 1rem;
+      border: none;
+      border-radius: 5px;
+      background: #333;
+      color: white;
+      font-size: 1rem;
+    }
+
+    form input::placeholder {
+      color: #bbb;
+    }
+
+    form input:focus {
+      outline: none;
+      background-color: #444;
+    }
+
+    .gender-group {
+      display: flex;
+      justify-content: space-around;
+      margin-bottom: 1rem;
+      font-size: 1rem;
+    }
+
+    .gender-group label {
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+      cursor: pointer;
+      color: #fff;
+    }
+
+    .gender-group input[type="radio"] {
+      accent-color: #e50914;
+    }
+
+    form button {
+      width: 100%;
+      padding: 0.9rem;
+      background-color: #e50914;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      font-weight: bold;
+      cursor: pointer;
+      font-size: 1rem;
+      transition: background-color 0.3s ease;
+    }
+
+    form button:hover {
+      background-color: #f40612;
+    }
+
+    table {
+      width: 90%;
+      max-width: 900px;
+      margin: 3rem auto;
+      border-collapse: collapse;
+      border-radius: 12px;
+      overflow: hidden;
+      background-color: #fff;
+      box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+      color: #000;
+      font-family: 'Bebas Neue', Arial, sans-serif;
+    }
+
+    th, td {
+      padding: 1rem 1.2rem;
+      border: 1px solid #e50914;
+      text-align: left;
+    }
+
+    th {
+      background-color: #e50914;
+      color: white;
+      text-transform: uppercase;
+      font-size: 0.9rem;
+    }
+
+    tr:hover {
+      background-color: #f2f2f2;
+    }
+
+    .chat-btn {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      background: #e50914;
+      color: white;
+      border: none;
+      border-radius: 50%;
+      width: 55px;
+      height: 55px;
+      font-size: 26px;
+      cursor: pointer;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+      z-index: 99;
+    }
+
+    .chat-box {
+      position: fixed;
+      bottom: 90px;
+      right: 20px;
+      background: rgba(0,0,0,0.95);
+      color: white;
+      padding: 1rem;
+      border-radius: 10px;
+      width: 260px;
+      display: none;
+      font-family: Arial, sans-serif;
+    }
+
+    footer {
+      background-color: #111;
+      text-align: center;
+      color: white;
+      padding: 2rem 1rem;
+      font-family: 'Bebas Neue', Arial, sans-serif;
+      font-size: 1.2rem;
+      margin-top: 2rem;
+      opacity: 0;
+      transform: translateY(20px);
+      transition: all 0.8s ease;
+    }
+
+    footer.show {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .fade-in {
+      opacity: 0;
+      transform: translateY(20px);
+      transition: all 0.6s ease-out;
+    }
+
+    .fade-in.show {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    @media (max-width: 600px) {
+      h2 {
+        font-size: 1.8rem;
+      }
+
+      .navbar ul {
+        flex-direction: column;
+        gap: 1rem;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Navbar -->
+  <nav class="navbar">
+    <ul>
+      <li><a href="#home" onclick="animateLink(this)">Home</a></li>
+      <li><a href="#form" onclick="animateLink(this)">Registrasi</a></li>
+      <li><a href="#tabel" onclick="animateLink(this)">Data</a></li>
+      <li><a href="#kontak" onclick="animateLink(this)">Kontak</a></li>
+    </ul>
+    <img src="https://upload.wikimedia.org/wikipedia/en/7/7a/Manchester_United_FC_crest.svg" alt="Manchester United Logo" class="mu-logo" title="Manchester United" />
+  </nav>
+
+  <!-- Home Section -->
+  <div id="home" style="height: 80px;"></div>
+
+  <!-- Form Section -->
+  <div class="container fade-in show" id="form">
+    <div class="form-container">
+      <h2>Form Registrasi</h2>
+      <form id="registerForm">
+        <input required type="text" id="nama" placeholder="Nama Lengkap" autocomplete="off" />
+        <input required type="email" id="email" placeholder="Email" autocomplete="off" />
+        <input required type="password" id="password" placeholder="Password" autocomplete="off" />
+        <input required type="number" id="nomorHp" placeholder="Nomor HP" autocomplete="off" />
+        <input required type="date" id="tanggalLahir" placeholder="Tanggal Lahir" autocomplete="off" />
+
+        <div class="gender-group">
+          <label><input type="radio" name="gender" value="Laki-laki" required>
+            <i class="fas fa-mars"></i> Laki-laki
+          </label>
+          <label><input type="radio" name="gender" value="Perempuan">
+            <i class="fas fa-venus"></i> Perempuan
+          </label>
+        </div>
+
+        <button type="submit">Submit</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- Table Section -->
+  <table id="tabel" class="fade-in show">
+    <thead>
+      <tr>
+        <th>Nama</th>
+        <th>Email</th>
+        <th>Tanggal Lahir</th>
+        <th>Jenis Kelamin</th>
+      </tr>
+    </thead>
+    <tbody></tbody>
+  </table>
+
+  <!-- Chat Button -->
+  <button class="chat-btn" onclick="toggleChat()">?</button>
+
+  <!-- Chat Box -->
+  <div class="chat-box fade-in" id="kontak">
+    <strong>Kontak Kami:</strong>
+    <p>Email: support@example.com</p>
+    <p>Telp: 08123456789</p>
+  </div>
+
+  <!-- Footer -->
+  <footer id="footer">
+    &copy; 2025 by Raja
+  </footer>
+
+  <script>
+    function animateLink(element) {
+      // Optional animation logic
+    }
+
+    function toggleChat() {
+      const chatBox = document.getElementById('kontak');
+      chatBox.style.display = (chatBox.style.display === 'block') ? 'none' : 'block';
+    }
+
+    const form = document.getElementById('registerForm');
+    const tbody = document.querySelector('#tabel tbody');
+
+    form.addEventListener('submit', function(e) {
+      e.preventDefault();
+
+      const nama = document.getElementById('nama').value.trim();
+      const email = document.getElementById('email').value.trim();
+      const tanggalLahir = document.getElementById('tanggalLahir').value;
+      const gender = form.querySelector('input[name="gender"]:checked')?.value || '';
+
+      const row = document.createElement('tr');
+      row.innerHTML = `
+        <td>${nama}</td>
+        <td>${email}</td>
+        <td>${tanggalLahir}</td>
+        <td>${gender}</td>
+      `;
+      tbody.appendChild(row);
+      form.reset();
     });
-</script>
+
+    window.addEventListener('load', () => {
+      document.querySelectorAll('.fade-in').forEach(el => el.classList.add('show'));
+      document.getElementById('footer').classList.add('show');
+    });
+  </script>
+</body>
+</html>
